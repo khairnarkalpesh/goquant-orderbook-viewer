@@ -21,7 +21,7 @@ const ConnectionStatus = ({ isConnected = false, venue = "", error = "" }) => {
     if (isConnected) {
       return {
         icon: <Wifi className="w-3 h-3 text-green-500" />,
-        text: `Live ${venue} Websocket`,
+        text: `Websocket connected to ${venue} `,
         color: "text-green-600",
       };
     } else if (error?.includes("REST API")) {
@@ -39,7 +39,7 @@ const ConnectionStatus = ({ isConnected = false, venue = "", error = "" }) => {
     } else {
       return {
         icon: <WifiOff className="w-3 h-3 text-red-500" />,
-        text: error,
+        text: error || `Connecting to ${venue}`,
         color: "text-red-600",
       };
     }

@@ -2,11 +2,13 @@ import { RECORDS_TO_DISPLAY } from "@/app/utils/constants";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 
-const OrderBookViewer = ({
-  data,
-  venue,
-  isConnected,
-}) => {
+const PriceQuantityTitle = () => (
+  <div className="flex justify-between text-sm font-semibold text-gray-500 my-2">
+    <span>Price</span>
+    <span>Quantity</span>
+  </div>
+);
+const OrderBookViewer = ({ data, venue, isConnected }) => {
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center h-64 sm:h-96 space-y-4">
@@ -50,6 +52,36 @@ const OrderBookViewer = ({
 
       {/* Orderbook Viewer */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Bids (Buy Orders List) */}
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <TrendingDown className="h-4 w-4 text-green-600" />
+            <h3 className="text-sm font-semibold text-green-600">
+              Bids (Buy) - {bidsData.length} levels
+            </h3>
+          </div>
+          <PriceQuantityTitle />
+          <div className="space-y-1">
+            {bidsData.length > 0 ? (
+              bidsData.map(([price, quantity], index) => (
+                <div
+                  key={`vid-${index}`}
+                  className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-green-50 hover:bg-green-100"
+                >
+                  <span className="text-green-600 font-mono font-semibold">
+                    {price}
+                  </span>
+                  <span className="font-mono text-gray-700">{quantity}</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-gray-500 text-center py-4 text-sm">
+                No bid data available
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Asks (Sell Orders List) */}
         <div>
           <div className="flex items-center gap-2 mb-2">
@@ -58,10 +90,7 @@ const OrderBookViewer = ({
               Asks (Sell) - {asksData.length} levels
             </h3>
           </div>
-          <div className="flex justify-between text-sm font-semibold text-gray-500 m-2">
-            <span>Price</span>
-            <span>Quantity</span>
-          </div>
+          <PriceQuantityTitle />
           <div className="space-y-1">
             {asksData.length > 0 ? (
               asksData
@@ -81,39 +110,6 @@ const OrderBookViewer = ({
             ) : (
               <div className="text-gray-500 text-center py-4 text-sm">
                 No ask data available
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Bids (Buy Orders List) */}
-        <div>
-          <div className="flex items-center gap-2 mb-2">
-            <TrendingDown className="h-4 w-4 text-green-600" />
-            <h3 className="text-sm font-semibold text-green-600">
-              Bids (Buy) - {bidsData.length} levels
-            </h3>
-          </div>
-          <div className="flex justify-between text-sm font-semibold text-gray-500 m-2">
-            <span>Price</span>
-            <span>Quantity</span>
-          </div>
-          <div className="space-y-1">
-            {bidsData.length > 0 ? (
-              bidsData.map(([price, quantity], index) => (
-                <div
-                  key={`vid-${index}`}
-                  className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-green-50 hover:bg-green-100"
-                >
-                  <span className="text-green-600 font-mono font-semibold">
-                    {price}
-                  </span>
-                  <span className="font-mono text-gray-700">{quantity}</span>
-                </div>
-              ))
-            ) : (
-              <div className="text-gray-500 text-center py-4 text-sm">
-                No bid data available
               </div>
             )}
           </div>

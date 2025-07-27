@@ -3,16 +3,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import OrderBookViewer from "./components/OrderBook/OrderBookViewer/OrderBookViewer";
-import Data from "./utils/orderbookData.json";
 import ConnectionStatus from "./components/orderbook/ConnectionStatus";
+import { useOrderbookData } from "./hooks/useOrderbookData";
 const VENUS = ["OKX", "Bybit", "Deribit"];
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState("OKX");
-  const { orderbookData, isConnected, error } = {
-    orderbookData: Data,
-    isConnected: true,
-    error: "",
-  };
+  const [selectedSymbol, setSelectedSymbol] = useState("BTC-USD");
+  const { orderbookData, isConnected, error } = useOrderbookData(
+    selectedVenue,
+    selectedSymbol
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
@@ -38,7 +38,7 @@ export default function Home() {
                   <ConnectionStatus
                     isConnected={isConnected}
                     venue={selectedVenue}
-                    error={null}
+                    error={error}
                   />
                 </div>
                 <Tabs
