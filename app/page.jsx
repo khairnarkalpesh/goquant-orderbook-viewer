@@ -5,6 +5,7 @@ import { useState } from "react";
 import OrderBookViewer from "./components/OrderBook/OrderBookViewer/OrderBookViewer";
 import ConnectionStatus from "./components/orderbook/ConnectionStatus";
 import { useOrderbookData } from "./hooks/useOrderbookData";
+import { formatPrice } from "./utils/formatters";
 const VENUS = ["OKX", "Bybit", "Deribit"];
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState("OKX");
@@ -29,9 +30,9 @@ export default function Home() {
               <CardHeader>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <CardTitle className="text-lg sm:text-xl">
-                    Orderbook - {"BTC-USD"}
+                    Orderbook - {selectedSymbol}
                     <span className="text-sm font-normal text-gray-500 ml-2">
-                      (Last: 45580.26)
+                      (Last: ${formatPrice(orderbookData?.lastPrice)})
                     </span>
                   </CardTitle>
 

@@ -1,4 +1,5 @@
 import { RECORDS_TO_DISPLAY } from "@/app/utils/constants";
+import { formatPrice, formatQuanitity } from "@/app/utils/formatters";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 
@@ -8,6 +9,7 @@ const PriceQuantityTitle = () => (
     <span>Quantity</span>
   </div>
 );
+
 const OrderBookViewer = ({ data, venue, isConnected }) => {
   if (!data) {
     return (
@@ -33,8 +35,12 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
     .filter(([price, quantity]) => price > 0 && quantity > 0)
     .slice(0, RECORDS_TO_DISPLAY);
 
+  const bestBid = bidsData[0]?.[0] || 0;
+  const bestAsk = asksData[0]?.[0] || 0;
+  const spread = bestAsk - bestBid;
+
   return (
-    <div>
+    <div className="space-y-4">
       <div className="flex items-center gap-1 mb-4">
         <div
           className={`w-2 h-2 rounded-full ${
@@ -65,13 +71,15 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
             {bidsData.length > 0 ? (
               bidsData.map(([price, quantity], index) => (
                 <div
-                  key={`vid-${index}`}
+                  key={`bid-${index}`}
                   className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-green-50 hover:bg-green-100"
                 >
                   <span className="text-green-600 font-mono font-semibold">
-                    {price}
+                    ${formatPrice(price)}
                   </span>
-                  <span className="font-mono text-gray-700">{quantity}</span>
+                  <span className="font-mono text-gray-700">
+                    {formatQuanitity(quantity)}
+                  </span>
                 </div>
               ))
             ) : (
@@ -102,9 +110,11 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
                     className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-red-50 hover:bg-red-100"
                   >
                     <span className="text-red-600 font-mono font-semibold">
-                      {price}
+                      ${formatPrice(price)}
                     </span>
-                    <span className="font-mono text-gray-700">{quantity}</span>
+                    <span className="font-mono text-gray-700">
+                      {formatQuanitity(quantity)}
+                    </span>
                   </div>
                 ))
             ) : (
@@ -114,6 +124,34 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
             )}
           </div>
         </div>
+      </div>
+
+      {/* Best Bid, Spread and Best Ask */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center">
+        <div className="bg-green-50 rounded py-2 px-3">
+          <div className="text-sm text-gray-600">Best Bid</div>
+          <div className="font-semibold font-mono text-green-600">
+            ${formatPrice(bestBid)}
+          </div>
+        </div>
+        <div className="bg-gray-50 rounded py-2 px-3">
+          <div className="text-sm text-gray-600">Spread</div>
+          <div className="font-semibold font-mono text-gray-600">
+            ${formatPrice(spread)}
+          </div>
+        </div>
+        <div className="bg-red-50 rounded py-2 px-3">
+          <div className="text-sm text-gray-600">Best Ask</div>
+          <div className="font-semibold font-mono text-red-600">
+            ${formatPrice(bestAsk)}
+          </div>
+        </div>
+      </div>
+
+      {/* Data Stats */}
+      <div className="text-sm text-gray-500 text-center bg-gray-50 py-2 rounded">
+        📊 {bidsData.length} Bids | {asksData.length} Asks | Last: $
+        {formatPrice(lastPrice)} | Updated: {new Date().toLocaleDateString()}
       </div>
     </div>
   );

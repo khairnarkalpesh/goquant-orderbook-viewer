@@ -1,4 +1,4 @@
-import { VENUE } from "./constants";
+import { RECORDS_TO_DISPLAY, VENUE } from "./constants";
 
 /**
  * Returns the WebSocket URL for a given exchange venue.
@@ -150,4 +150,58 @@ export const parseOrderBookData = (data, venue) => {
     console.error(`Error parsing ${venue} orderbook data:`, error);
   }
   return null;
+};
+
+/**
+ * Helper: Generate mock orderbook data for a given venue.
+ *
+ * @param {string} venue - The exchange identifier (e.g., "OKX", "Bybit", "Deribit").
+ * @returns {Object} Mock orderbook data with bids, asks, lastPrice, and timestamp
+ */
+export const generateMockOrderbookData = (venue) => {
+  console.log(`Generating mock data for ${venue}`);
+  const bids = [];
+  const asks = [];
+  let basePrice;
+
+  // Different base prices for different venues to simulate real differences
+  switch (venue) {
+    case VENUE.OKX:
+      basePrice = 41000 + Math.random() * 1000;
+      break;
+    case VENUE.BYBIT:
+      basePrice = 42000 + Math.random() * 1000;
+      break;
+    case VENUE.DERIBIT:
+      basePrice = 43900 + Math.random() * 1000;
+    default:
+      basePrice = 45000 + Math.random() * 1000;
+  }
+
+  // Generate bids below base price
+  for (let i = 0; i < RECORDS_TO_DISPLAY; i++) {
+    const price = basePrice - (i + 1) * Math.random() * 50 + 10;
+    const quantity = Math.random() * 5 + 1;
+    bids.push([price, quantity]);
+  }
+
+  // Sort bids in descending order by price (highest bid first)
+  bids.sort((a, b) => b[0] - a[0]);
+
+  // Generate asks above base price
+  for (let i = 0; i < RECORDS_TO_DISPLAY; i++) {
+    const price = basePrice + (i + 1) * Math.random() * 50 + 10;
+    const quantity = Math.random() * 5 + 1;
+    asks.push([price, quantity]);
+  }
+
+  // Sort asks in ascending order by price (lowest ask first)
+  asks.sort((a, b) => a[0] - b[0]);
+
+  return {
+    bids,
+    asks,
+    lastPrice: basePrice,
+    timestamp: Date.now(),
+  };
 };

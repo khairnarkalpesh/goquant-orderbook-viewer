@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import {
+  generateMockOrderbookData,
   getSubscriptionMessage,
   getWebSocketUrl,
   parseOrderBookData,
 } from "../utils/helpers";
 import { VENUE } from "../utils/constants";
-import data from "../utils/orderBookData.json";
 export function useOrderbookData(venue, symbol) {
   const [orderbookData, setOrderbookData] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -37,6 +37,7 @@ export function useOrderbookData(venue, symbol) {
       const wsUrl = getWebSocketUrl(venue);
       if (!wsUrl) {
         setError(`Unsupported venue: ${venue}`);
+        setOrderbookData(generateMockOrderbookData(venue));
         return;
       }
 
@@ -100,18 +101,32 @@ export function useOrderbookData(venue, symbol) {
 
         wsRef.current.onerror = (error) => {
           console.error(`${venue} WebSocket error:`, error);
-          setError(`WebSocket connection error for ${venue}`);
+          setError(`WebSocket failed to connect ${venue}`);
           setIsConnected(false);
+          setOrderbookData(generateMockOrderbookData(venue));
         };
 
         wsRef.current.onclose = (event) => {
           console.log(`${venue} Websocket closed:`, event.code, event.reason);
           setIsConnected(false);
+
+          // Use mock data as fallback
+          console.log(`Using mock data for ${venue}`);
+          setOrderbookData(generateMockOrderbookData(venue));
+
+          // Set up mock data updates
+          const mockInterval = setInterval(() => {
+            setOrderbookData(generateMockOrderbookData(venue));
+          }, 1000);
+
+          // Clean up mock interval when component unmounts
+          return () => clearInterval(mockInterval);
         };
       } catch (error) {
         console.error(`Failed to connect to ${venue}:`, error);
         setError(`Failed to connect to ${venue}:`, error.message);
         setIsConnected(false);
+        setOrderbookData(generateMockOrderbookData(venue));
       }
     };
 
