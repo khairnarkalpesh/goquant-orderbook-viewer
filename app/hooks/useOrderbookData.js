@@ -5,8 +5,17 @@ import {
   getSubscriptionMessage,
   getWebSocketUrl,
   parseOrderBookData,
+  throttle,
 } from "../utils/helpers";
 import { VENUE } from "../utils/constants";
+
+// Rate limiting configuration
+const RATE_LIMIT_MS = {
+  OKX: 500, // Update every 500ms for OKX
+  Bybit: 500, // Update every 500ms for Bybit
+  Deribit: 1000, // Update every 1000ms for Deribit
+};
+
 export function useOrderbookData(venue, symbol) {
   const [orderbookData, setOrderbookData] = useState(null);
   const [isConnected, setIsConnected] = useState(false);
@@ -24,6 +33,8 @@ export function useOrderbookData(venue, symbol) {
     // Clear any existing timeouts
     clearExistingTimeouts();
 
+    const updateOrderbook = throttle(setOrderbookData, RATE_LIMIT_MS[venue]);
+
     function clearExistingTimeouts() {
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
@@ -37,8 +48,17 @@ export function useOrderbookData(venue, symbol) {
       const wsUrl = getWebSocketUrl(venue);
       if (!wsUrl) {
         setError(`Unsupported venue: ${venue}`);
+        // Use mock data as fallback
+        console.log(`Using mock data for ${venue}`);
         setOrderbookData(generateMockOrderbookData(venue));
-        return;
+
+        // Set up mock data updates
+        const mockInterval = setInterval(() => {
+          setOrderbookData(generateMockOrderbookData(venue));
+        }, 1000);
+
+        // Clean up mock interval when component unmounts
+        return () => clearInterval(mockInterval);
       }
 
       console.log(`Connecting to ${venue} WebSocket`);
@@ -92,7 +112,7 @@ export function useOrderbookData(venue, symbol) {
                 lastPrice: parsedData.lastPrice,
               });
               console.log(parsedData);
-              setOrderbookData(parsedData);
+              updateOrderbook(parsedData);
             }
           } catch (error) {
             console.error(`Error parsing ${venue} WebSocket message:`, error);

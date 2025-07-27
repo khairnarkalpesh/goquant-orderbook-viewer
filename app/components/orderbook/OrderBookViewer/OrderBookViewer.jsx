@@ -151,7 +151,7 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
       {/* Data Stats */}
       <div className="text-sm text-gray-500 text-center bg-gray-50 py-2 rounded">
         📊 {bidsData.length} Bids | {asksData.length} Asks | Last: $
-        {formatPrice(lastPrice)} | Updated: {new Date().toLocaleDateString()}
+        {formatPrice(lastPrice)} | Updated: {new Date().toLocaleTimeString()}
       </div>
     </div>
   );

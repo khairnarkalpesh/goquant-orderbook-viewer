@@ -205,3 +205,47 @@ export const generateMockOrderbookData = (venue) => {
     timestamp: Date.now(),
   };
 };
+
+/**
+ * Throttles a function so it's only called once every `limit` ms.
+ * Ensures that the last call is not lost (trailing update).
+ *
+ * @param callback - The function to throttle.
+ * @param limit - Time in milliseconds between allowed calls.
+ * @returns A throttled function.
+ */
+export const throttle = (fn, delay = 1000) => {
+  let lastCallTime = 0;
+  let timeoutId = null;
+  let pendingArgs = null;
+
+  return function (...args) {
+    const now = Date.now();
+    const timeSinceLastCall = now - lastCallTime;
+
+    if (timeSinceLastCall >= delay) {
+      // Execute immediately if enough time has passed
+      fn(...args);
+      lastCallTime = now;
+
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+        pendingArgs = null;
+      }
+    } else {
+      // Clear any existing timeout to ensure only the last call within the delay is scheduled
+      pendingArgs = args;
+      if (!timeoutId) {
+        timeoutId = setTimeout(() => {
+          if (pendingArgs) {
+            fn(...pendingArgs);
+            lastCallTime = Date.now();
+            pendingArgs = null;
+          }
+          timeoutId = null;
+        }, delay - timeSinceLastCall);
+      }
+    }
+  };
+};
