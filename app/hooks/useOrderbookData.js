@@ -48,17 +48,13 @@ export function useOrderbookData(venue, symbol) {
       const wsUrl = getWebSocketUrl(venue);
       if (!wsUrl) {
         setError(`Unsupported venue: ${venue}`);
+        setIsConnected(false);
+
         // Use mock data as fallback
         console.log(`Using mock data for ${venue}`);
         setOrderbookData(generateMockOrderbookData(venue));
 
-        // Set up mock data updates
-        const mockInterval = setInterval(() => {
-          setOrderbookData(generateMockOrderbookData(venue));
-        }, 1000);
-
-        // Clean up mock interval when component unmounts
-        return () => clearInterval(mockInterval);
+        return;
       }
 
       console.log(`Connecting to ${venue} WebSocket`);
@@ -133,14 +129,6 @@ export function useOrderbookData(venue, symbol) {
           // Use mock data as fallback
           console.log(`Using mock data for ${venue}`);
           setOrderbookData(generateMockOrderbookData(venue));
-
-          // Set up mock data updates
-          const mockInterval = setInterval(() => {
-            setOrderbookData(generateMockOrderbookData(venue));
-          }, 1000);
-
-          // Clean up mock interval when component unmounts
-          return () => clearInterval(mockInterval);
         };
       } catch (error) {
         console.error(`Failed to connect to ${venue}:`, error);
