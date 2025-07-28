@@ -6,7 +6,10 @@ import OrderBookViewer from "./components/OrderBook/OrderBookViewer/OrderBookVie
 import ConnectionStatus from "./components/orderbook/ConnectionStatus";
 import { useOrderbookData } from "./hooks/useOrderbookData";
 import { formatPrice } from "./utils/formatters";
-const VENUS = ["OKX", "Bybit", "Deribit"];
+import OrderSimulationForm from "./components/orderbook/OrderBookViewer/OrderSimulationForm";
+import { VENUES } from "./utils/constants";
+import { useOrderSimulation } from "./hooks/useOrderSimulation";
+
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState("OKX");
   const [selectedSymbol, setSelectedSymbol] = useState("BTC-USD");
@@ -14,6 +17,8 @@ export default function Home() {
     selectedVenue,
     selectedSymbol
   );
+  const { simulatedOrder, simulateOrder, clearSimulation } =
+    useOrderSimulation();
 
   return (
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
@@ -48,7 +53,7 @@ export default function Home() {
                   className="w-full"
                 >
                   <TabsList className="grid w-full grid-cols-3">
-                    {VENUS.map((venue) => (
+                    {VENUES.map((venue) => (
                       <TabsTrigger
                         key={venue}
                         value={venue}
@@ -65,9 +70,23 @@ export default function Home() {
                   data={orderbookData}
                   venue={selectedVenue}
                   isConnected={isConnected}
+                  simulatedOrder={simulatedOrder}
                 />
               </CardContent>
             </Card>
+          </div>
+
+          {/* Order Simulation Form */}
+          <div className="xl:col-span-1">
+            <OrderSimulationForm
+              orderbookData={orderbookData}
+              selectedVenue={selectedVenue}
+              selectedSymbol={selectedSymbol}
+              onVenueChange={setSelectedVenue}
+              onSymbolChange={setSelectedSymbol}
+              onSimulateOrder={simulateOrder}
+              onClearSimulation={clearSimulation}
+            />
           </div>
         </div>
       </div>

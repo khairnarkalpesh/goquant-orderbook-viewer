@@ -1,5 +1,9 @@
-import { RECORDS_TO_DISPLAY } from "@/app/utils/constants";
-import { formatPrice, formatQuanitity } from "@/app/utils/formatters";
+import {
+  ORDER_SIDE,
+  ORDER_TYPE,
+  RECORDS_TO_DISPLAY,
+} from "@/app/utils/constants";
+import { formatPrice, formatQuantity } from "@/app/utils/formatters";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 
@@ -10,7 +14,7 @@ const PriceQuantityTitle = () => (
   </div>
 );
 
-const OrderBookViewer = ({ data, venue, isConnected }) => {
+const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center h-64 sm:h-96 space-y-4">
@@ -39,8 +43,25 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
   const bestAsk = asksData[0]?.[0] || 0;
   const spread = bestAsk - bestBid;
 
+  const isSimulatedOrderVisible = (price, side) => {
+    console.log({ simulatedOrder, price });
+    if (
+      !simulatedOrder ||
+      simulatedOrder.venue !== venue ||
+      simulatedOrder.type === ORDER_TYPE.MARKET
+    ) {
+      return false;
+    }
+
+    return (
+      simulatedOrder.side === side &&
+      Math.abs(simulatedOrder.price - price) < 0.01
+    );
+  };
+
   return (
     <div className="space-y-4">
+      {/* Live / Fallback Data Indicator */}
       <div className="flex items-center gap-1 mb-4">
         <div
           className={`w-2 h-2 rounded-full ${
@@ -56,6 +77,60 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
         </span>
       </div>
 
+      {/* Simulated Order Position Indicator */}
+      {simulatedOrder && simulatedOrder.venue === venue && (
+        <div className="bg-gray-50 border border-gray-200 p-3 rounded-lg">
+          <h4 className="font-semibold text-sm mb-3 text-gray-800">
+            Simulated Order Details
+          </h4>
+          <div className="flex justify-between gap-2 text-xs text-gray-700">
+            <div>
+              Type:{" "}
+              <span
+                className={`font-bold ${
+                  simulatedOrder.type === ORDER_TYPE.LIMIT
+                    ? "text-purple-800 bg-purple-200 px-2 py-1 rounded"
+                    : "text-blue-800 bg-blue-200 px-2 py-1 rounded"
+                }`}
+              >
+                {simulatedOrder.type.toUpperCase()}
+              </span>
+            </div>
+            <div>
+              Side:{" "}
+              <span
+                className={`font-bold ${
+                  simulatedOrder.side === ORDER_SIDE.BUY
+                    ? "text-green-800 bg-green-200 px-2 py-1 rounded"
+                    : "text-red-800 bg-red-200 px-2 py-1 rounded"
+                }`}
+              >
+                {simulatedOrder.side.toUpperCase()}
+              </span>
+            </div>
+            <div>
+              Quantity:{" "}
+              <span className="font-bold">
+                {formatQuantity(simulatedOrder.quantity)}
+              </span>
+            </div>
+            {simulatedOrder.type === "limit" && (
+              <div>
+                Price:{" "}
+                <span className="font-bold">
+                  ${formatPrice(simulatedOrder.price)}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Estimated fill percentage
+  - Market impact calculation
+  - Slippage estimation
+  - Time to fill (if applicable) */}
+
       {/* Orderbook Viewer */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Bids (Buy Orders List) */}
@@ -69,19 +144,44 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
           <PriceQuantityTitle />
           <div className="space-y-1">
             {bidsData.length > 0 ? (
-              bidsData.map(([price, quantity], index) => (
-                <div
-                  key={`bid-${index}`}
-                  className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-green-50 hover:bg-green-100"
-                >
-                  <span className="text-green-600 font-mono font-semibold">
-                    ${formatPrice(price)}
-                  </span>
-                  <span className="font-mono text-gray-700">
-                    {formatQuanitity(quantity)}
-                  </span>
-                </div>
-              ))
+              bidsData.map(([price, quantity], index) => {
+                const isSimulatedOrder = isSimulatedOrderVisible(
+                  price,
+                  ORDER_SIDE.BUY
+                );
+                const simulatedQuantity = isSimulatedOrder
+                  ? simulatedOrder.quantity
+                  : 0;
+                return (
+                  <div
+                    key={`bid-${index}`}
+                    className={`flex justify-between items-center p-2 rounded text-xs transition-all duration-200 ${
+                      isSimulatedOrder
+                        ? "bg-yellow-100 border-2 border-yellow-400 shadow-md transform scale-105 relative"
+                        : "bg-green-50 hover:bg-green-100"
+                    }`}
+                  >
+                    <span className="text-green-600 font-mono font-semibold">
+                      ${formatPrice(price)}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-gray-700">
+                        {formatQuantity(quantity)}
+                      </span>
+                      {isSimulatedOrder && (
+                        <span className="bg-yellow-500 text-yellow-900 px-1 py-0.5 rounded text-xs font-bold">
+                          +{formatQuantity(simulatedQuantity)} SIM
+                        </span>
+                      )}
+                    </div>
+                    {isSimulatedOrder && (
+                      <div className="absolute -right-2 top-1/2 transform -translate-y-1/2">
+                        <div className="w-0 h-0 border-l-4 border-l-yellow-500 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })
             ) : (
               <div className="text-gray-500 text-center py-4 text-sm">
                 No bid data available
@@ -104,19 +204,45 @@ const OrderBookViewer = ({ data, venue, isConnected }) => {
               asksData
                 .slice()
                 .reverse()
-                .map(([price, quantity], index) => (
-                  <div
-                    key={`ask-${index}`}
-                    className="flex justify-between items-center p-2 rounded text-xs transition-all duration-200 bg-red-50 hover:bg-red-100"
-                  >
-                    <span className="text-red-600 font-mono font-semibold">
-                      ${formatPrice(price)}
-                    </span>
-                    <span className="font-mono text-gray-700">
-                      {formatQuanitity(quantity)}
-                    </span>
-                  </div>
-                ))
+                .map(([price, quantity], index) => {
+                  const isSimulatedOrder = isSimulatedOrderVisible(
+                    price,
+                    ORDER_SIDE.SELL
+                  );
+                  const simulatedQuantity = isSimulatedOrder
+                    ? simulatedOrder.quantity
+                    : 0;
+
+                  return (
+                    <div
+                      key={`ask-${index}`}
+                      className={`flex justify-between items-center p-2 rounded text-xs transition-all duration-200 ${
+                        isSimulatedOrder
+                          ? "bg-yellow-50 border-2 border-yellow-400 shadow-md transform scale-105 relative"
+                          : "bg-red-50 hover:bg-red-100"
+                      }`}
+                    >
+                      <span className="text-red-600 font-mono font-semibold">
+                        ${formatPrice(price)}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-gray-700">
+                          {formatQuantity(quantity)}
+                        </span>
+                        {isSimulatedOrder && (
+                          <span className="bg-yellow-500 text-yellow-900 px-1 py-0.5 rounded text-xs font-bold">
+                            +{formatQuantity(simulatedQuantity)} SIM
+                          </span>
+                        )}
+                      </div>
+                      {isSimulatedOrder && (
+                        <div className="absolute -right-2 top-1/2 transform -translate-y-1/2">
+                          <div className="w-0 h-0 border-l-4 border-l-yellow-500 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
             ) : (
               <div className="text-gray-500 text-center py-4 text-sm">
                 No ask data available

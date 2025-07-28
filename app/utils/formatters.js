@@ -5,7 +5,7 @@ export const formatPrice = (price) => {
 };
 
 // Format a number to 4 decimal places for quantity display
-export const formatQuanitity = (quantity) => {
+export const formatQuantity = (quantity) => {
   if (!quantity) return null;
   return quantity.toFixed(4);
 };
