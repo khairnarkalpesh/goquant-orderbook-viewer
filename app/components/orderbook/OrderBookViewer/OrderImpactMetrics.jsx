@@ -8,6 +8,27 @@ import { AlertTriangle } from "lucide-react";
 import React from "react";
 
 const OrderImpactMetrics = ({ simulatedOrder, venue, orderbookData }) => {
+//   simulatedOrder = {
+//     type: "market",
+//     side: "buy",
+//     quantity: 100,
+//     venue: "okx",
+//   };
+
+//   orderbookData = {
+//     lastPrice: 10.0,
+//     bids: [
+//       [9.9, 50],
+//       [9.8, 50],
+//       [9.7, 50],
+//     ],
+//     asks: [
+//       [10.1, 20],
+//       [10.3, 30],
+//       [10.5, 100],
+//     ],
+//   };
+//   venue = "okx"
   if (!simulatedOrder || simulatedOrder.venue !== venue || !orderbookData)
     return null;
 

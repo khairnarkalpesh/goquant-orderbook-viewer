@@ -52,5 +52,5 @@ function calculateAverage(total, count) {
  */
 export function calculateSlippage(expected, actual) {
   if (!expected || !actual) return 0;
-  return ((actual - expected) / expected) * 100;
+  return Math.abs((actual - expected) / expected) * 100;
 }

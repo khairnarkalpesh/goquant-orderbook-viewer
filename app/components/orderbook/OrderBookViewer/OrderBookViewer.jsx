@@ -8,6 +8,7 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 import OrderImpactMetrics from "./OrderImpactMetrics";
 import DataSourceIndicator from "./DataSourceIndicator";
+import SlippageWarning from "./SlippageWarning";
 
 const PriceQuantityTitle = () => (
   <div className="flex justify-between text-sm font-semibold text-gray-500 my-2">
@@ -117,6 +118,13 @@ const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
 
       {/* Order Impact Metrics*/}
       <OrderImpactMetrics
+        simulatedOrder={simulatedOrder}
+        orderbookData={data}
+        venue={venue}
+      />
+
+      {/* Slippage Warning  */}
+      <SlippageWarning
         simulatedOrder={simulatedOrder}
         orderbookData={data}
         venue={venue}
