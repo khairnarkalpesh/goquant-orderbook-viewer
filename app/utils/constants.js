@@ -38,3 +38,8 @@ export const TIMING_OPTIONS = [
   { value: "10000", label: "10s delay" },
   { value: "30000", label: "30s delay" },
 ];
+
+export const EXECUTION_TYPE = {
+  IMMEDIATE: "immediate",
+  PENDING: "pending"
+}

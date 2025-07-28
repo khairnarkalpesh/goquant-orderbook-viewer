@@ -6,6 +6,8 @@ import {
 import { formatPrice, formatQuantity } from "@/app/utils/formatters";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
+import OrderImpactMetrics from "./OrderImpactMetrics";
+import DataSourceIndicator from "./DataSourceIndicator";
 
 const PriceQuantityTitle = () => (
   <div className="flex justify-between text-sm font-semibold text-gray-500 my-2">
@@ -62,20 +64,7 @@ const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
   return (
     <div className="space-y-4">
       {/* Live / Fallback Data Indicator */}
-      <div className="flex items-center gap-1 mb-4">
-        <div
-          className={`w-2 h-2 rounded-full ${
-            isConnected ? "bg-blue-500" : "bg-orange-500"
-          }`}
-        />
-        <span
-          className={`text-xs ${
-            isConnected ? "text-blue-400" : "text-orange-400"
-          }`}
-        >
-          {isConnected ? "Live Data" : "Fallback Data"}
-        </span>
-      </div>
+      <DataSourceIndicator isConnected={isConnected} />
 
       {/* Simulated Order Position Indicator */}
       {simulatedOrder && simulatedOrder.venue === venue && (
@@ -126,10 +115,12 @@ const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
         </div>
       )}
 
-      {/* Estimated fill percentage
-  - Market impact calculation
-  - Slippage estimation
-  - Time to fill (if applicable) */}
+      {/* Order Impact Metrics*/}
+      <OrderImpactMetrics
+        simulatedOrder={simulatedOrder}
+        orderbookData={data}
+        venue={venue}
+      />
 
       {/* Orderbook Viewer */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
