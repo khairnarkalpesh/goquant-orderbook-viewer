@@ -6,14 +6,14 @@ import OrderBookViewer from "./components/orderbook/OrderBookViewer";
 import ConnectionStatus from "./components/orderbook/ConnectionStatus";
 import { useOrderbookData } from "./hooks/useOrderbookData";
 import { formatPrice } from "./utils/formatters";
-import { VENUES } from "./utils/constants";
+import { SYMBOLS, VENUES } from "./utils/constants";
 import { useOrderSimulation } from "./hooks/useOrderSimulation";
 import OrderSimulationForm from "./components/orderbook/OrderSimulationForm";
 import MarketDepthChart from "./components/orderbook/MarketDepthChart";
 
 export default function Home() {
-  const [selectedVenue, setSelectedVenue] = useState("OKX");
-  const [selectedSymbol, setSelectedSymbol] = useState("BTC-USD");
+  const [selectedVenue, setSelectedVenue] = useState(VENUES[0] || "OKX");
+  const [selectedSymbol, setSelectedSymbol] = useState(SYMBOLS[0] || "BTC-USD");
   const { orderbookData, isConnected, error } = useOrderbookData(
     selectedVenue,
     selectedSymbol
