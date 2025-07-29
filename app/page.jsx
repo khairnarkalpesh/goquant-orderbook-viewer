@@ -2,13 +2,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import OrderBookViewer from "./components/OrderBook/OrderBookViewer/OrderBookViewer";
+import OrderBookViewer from "./components/orderbook/OrderBookViewer";
 import ConnectionStatus from "./components/orderbook/ConnectionStatus";
 import { useOrderbookData } from "./hooks/useOrderbookData";
 import { formatPrice } from "./utils/formatters";
-import OrderSimulationForm from "./components/orderbook/OrderBookViewer/OrderSimulationForm";
 import { VENUES } from "./utils/constants";
 import { useOrderSimulation } from "./hooks/useOrderSimulation";
+import OrderSimulationForm from "./components/orderbook/OrderSimulationForm";
 
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState("OKX");

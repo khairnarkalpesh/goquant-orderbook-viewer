@@ -1,5 +1,30 @@
 "use client";
 
+/**
+ * OrderSimulationForm Component
+ *
+ * Renders a form to simulate market or limit orders based on the selected venue and symbol.
+ *
+ * @param {string} selectedVenue - Currently selected trading venue.
+ * @param {string} selectedSymbol - Currently selected trading symbol (e.g., BTC/USDT).
+ * @param {function} onVenueChange - Callback to update the selected venue.
+ * @param {function} onSymbolChange - Callback to update the selected symbol.
+ * @param {function} onSimulateOrder - Callback triggered when the user simulates an order.
+ * @param {function} onClearSimulation - Callback triggered to clear the simulation.
+ * @param {Object} orderbookData - Order book data used to simulate orders.
+ *
+ * @example
+ * <OrderSimulationForm
+ *   selectedVenue="okx"
+ *   selectedSymbol="BTC/USDT"
+ *   onVenueChange={handleVenueChange}
+ *   onSymbolChange={handleSymbolChange}
+ *   onSimulateOrder={handleSimulate}
+ *   onClearSimulation={handleClear}
+ *   orderbookData={orderbookData}
+ * />
+ */
+
 import {
   ORDER_SIDE,
   ORDER_TYPE,

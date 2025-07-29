@@ -1,3 +1,14 @@
+/**
+ * DataSourceIndicator Component
+ *
+ * Visually indicates whether the data source is live (connected) or fallback (disconnected).
+ *
+ * @param {boolean} isConnected - Indicates if the live data source WebSocket is connected.
+ *
+ * @example
+ * <DataSourceIndicator isConnected={true} />
+ */
+
 import React from "react";
 
 const DataSourceIndicator = ({ isConnected }) => {

@@ -1,22 +1,20 @@
 /**
  * ConnectionStatus Component
  *
- * Displays a visual indicator (icon + text) showing the current connection status
+ * Displays a visual indicator (icon and text) showing the current WebSocket connection status.
  *
+ * @param {boolean} isConnected - Whether the WebSocket is currently connected.
+ * @param {string} venue - Name of the data source or exchange (e.g., "OKX").
+ * @param {string} error - Optional error message, if any.
  *
- * Props:
- * - isConnected (boolean): indicates if WebSocket is connected
- * - venue (string): name of the data source or exchange (e.g., "OKX")
- * - error (string): error message
- *
- * Usage:
+ * @example
  * <ConnectionStatus isConnected={true} venue="OKX" error="" />
  */
 
 import { Database, Globe, Wifi, WifiOff } from "lucide-react";
 import React from "react";
 
-const ConnectionStatus = ({ isConnected = false, venue = "", error = "" }) => {
+const ConnectionStatus = ({ isConnected, venue = "", error = "" }) => {
   const getStatusInfo = () => {
     if (isConnected) {
       return {

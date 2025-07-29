@@ -1,3 +1,21 @@
+/**
+ * SlippageWarning Component
+ *
+ * Displays a warning message if the simulated market order is expected to cause
+ * high or moderate slippage based on the current order book data.
+ *
+ * @param {Object} simulatedOrder - The simulated market order (type, side, quantity, venue).
+ * @param {Object} orderbookData - The current market order book (bids, asks, lastPrice).
+ * @param {string} venue - The trading venue (e.g., 'okx').
+ *
+ * @example
+ * <SlippageWarning
+ *   simulatedOrder={...}
+ *   orderbookData={...}
+ *   venue="okx"
+ * />
+ */
+
 import { ORDER_SIDE, ORDER_TYPE } from "@/app/utils/constants";
 import {
   calculateOrderFillMetrics,

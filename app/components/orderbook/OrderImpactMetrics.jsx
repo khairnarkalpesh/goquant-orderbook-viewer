@@ -1,3 +1,22 @@
+/**
+ * OrderImpactMetrics Component
+ *
+ * Calculates and displays metrics like average price, filled quantity, and slippage
+ * for a simulated order based on the current order book data.
+ *
+ * @param {Object} props
+ * @param {Object} props.simulatedOrder - The simulated order (includes type, side, quantity, venue).
+ * @param {string} props.venue - The trading venue associated with the order (e.g., "okx").
+ * @param {Object} props.orderbookData - Order book data including bids, asks, and last traded price.
+ *
+ * @example
+ * <OrderImpactMetrics
+ *   simulatedOrder={simulatedOrder}
+ *   venue="okx"
+ *   orderbookData={orderbookData}
+ * />
+ */
+
 import { EXECUTION_TYPE, ORDER_SIDE, ORDER_TYPE } from "@/app/utils/constants";
 import { formatPrice } from "@/app/utils/formatters";
 import {

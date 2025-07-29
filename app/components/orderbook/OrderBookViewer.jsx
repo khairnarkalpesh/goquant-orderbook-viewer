@@ -1,3 +1,23 @@
+/**
+ * OrderBookViewer Component
+ *
+ * Displays the current order book (bids and asks) for a specific venue,
+ * optionally highlighting how a simulated order would be filled.
+ *
+ * @param {Object} data - The order book data including bids, asks, and last price.
+ * @param {string} venue - The name of the trading venue (e.g., "okx").
+ * @param {boolean} isConnected - Indicates if the WebSocket is connected.
+ * @param {Object} simulatedOrder - Optional simulated order to visualize impact in the order book.
+ *
+ * @example
+ * <OrderBookViewer
+ *   data={orderbookData}
+ *   venue="okx"
+ *   isConnected={true}
+ *   simulatedOrder={simulatedOrder}
+ * />
+ */
+
 import {
   ORDER_SIDE,
   ORDER_TYPE,
@@ -6,9 +26,9 @@ import {
 import { formatPrice, formatQuantity } from "@/app/utils/formatters";
 import { TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
-import OrderImpactMetrics from "./OrderImpactMetrics";
 import DataSourceIndicator from "./DataSourceIndicator";
 import SlippageWarning from "./SlippageWarning";
+import OrderImpactMetrics from "./OrderImpactMetrics";
 
 const PriceQuantityTitle = () => (
   <div className="flex justify-between text-sm font-semibold text-gray-500 my-2">
