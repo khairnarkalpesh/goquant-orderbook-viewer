@@ -4,10 +4,9 @@
  * Calculates and displays metrics like average price, filled quantity, and slippage
  * for a simulated order based on the current order book data.
  *
- * @param {Object} props
- * @param {Object} props.simulatedOrder - The simulated order (includes type, side, quantity, venue).
- * @param {string} props.venue - The trading venue associated with the order (e.g., "okx").
- * @param {Object} props.orderbookData - Order book data including bids, asks, and last traded price.
+ * @param {Object} simulatedOrder - The simulated order (includes type, side, quantity, venue).
+ * @param {string} venue - The trading venue associated with the order (e.g., "okx").
+ * @param {Object} orderbookData - Order book data including bids, asks, and last traded price.
  *
  * @example
  * <OrderImpactMetrics
@@ -27,27 +26,6 @@ import { AlertTriangle } from "lucide-react";
 import React from "react";
 
 const OrderImpactMetrics = ({ simulatedOrder, venue, orderbookData }) => {
-//   simulatedOrder = {
-//     type: "market",
-//     side: "buy",
-//     quantity: 100,
-//     venue: "okx",
-//   };
-
-//   orderbookData = {
-//     lastPrice: 10.0,
-//     bids: [
-//       [9.9, 50],
-//       [9.8, 50],
-//       [9.7, 50],
-//     ],
-//     asks: [
-//       [10.1, 20],
-//       [10.3, 30],
-//       [10.5, 100],
-//     ],
-//   };
-//   venue = "okx"
   if (!simulatedOrder || simulatedOrder.venue !== venue || !orderbookData)
     return null;
 

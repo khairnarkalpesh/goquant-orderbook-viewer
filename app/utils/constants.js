@@ -19,13 +19,13 @@ export const SYMBOLS = [
 
 export const ORDER_TYPE = {
   LIMIT: "limit",
-  MARKET: "market"
-}
+  MARKET: "market",
+};
 
 export const ORDER_SIDE = {
   BUY: "buy",
-  SELL: "sell"
-}
+  SELL: "sell",
+};
 
 export const ORDER_TYPE_OPTIONS = [
   { label: "Market", value: "market" },
@@ -41,10 +41,22 @@ export const TIMING_OPTIONS = [
 
 export const EXECUTION_TYPE = {
   IMMEDIATE: "immediate",
-  PENDING: "pending"
-}
+  PENDING: "pending",
+};
 
 export const ORDER_BOOK_TYPE = {
   BID: "bid",
   ASK: "ask",
+};
+
+export const IMBALANCE_TYPE = {
+  BALANCED: "Balanced",
+  BUY_PRESSURE: "Buy Pressure",
+  SELL_PRESSURE: "Sell Pressure",
+};
+
+export const IMBALANCE_STRENGTH = {
+  NEUTRAL: "Neutral",
+  MODERATE: "Moderate",
+  STRONG: "Strong",
 };

@@ -83,3 +83,9 @@ export const calculateChartPoints = (orders, type) => {
 
   return chartPoints;
 };
+
+// Calculates percentage value from a number and total.
+export function calculatePercentage(number, total) {
+  if (total === 0) return 0;
+  return (number / total) * 100;
+}

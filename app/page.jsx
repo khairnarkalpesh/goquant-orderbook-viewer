@@ -10,6 +10,7 @@ import { SYMBOLS, VENUES } from "./utils/constants";
 import { useOrderSimulation } from "./hooks/useOrderSimulation";
 import OrderSimulationForm from "./components/orderbook/OrderSimulationForm";
 import MarketDepthChart from "./components/orderbook/MarketDepthChart";
+import OrderbookImbalanceIndicator from "./components/orderbook/OrderbookImbalanceIndicator";
 
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState(VENUES[0] || "OKX");
@@ -88,6 +89,18 @@ export default function Home() {
                   data={orderbookData}
                   simulatedOrder={simulatedOrder}
                 />
+              </CardContent>
+            </Card>
+
+            {/* Orderbook Imbalance Indicator */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl">
+                  Orderbook Imbalance Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <OrderbookImbalanceIndicator data={orderbookData} />
               </CardContent>
             </Card>
           </div>
