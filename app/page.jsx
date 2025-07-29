@@ -9,6 +9,7 @@ import { formatPrice } from "./utils/formatters";
 import { VENUES } from "./utils/constants";
 import { useOrderSimulation } from "./hooks/useOrderSimulation";
 import OrderSimulationForm from "./components/orderbook/OrderSimulationForm";
+import MarketDepthChart from "./components/orderbook/MarketDepthChart";
 
 export default function Home() {
   const [selectedVenue, setSelectedVenue] = useState("OKX");
@@ -70,6 +71,21 @@ export default function Home() {
                   data={orderbookData}
                   venue={selectedVenue}
                   isConnected={isConnected}
+                  simulatedOrder={simulatedOrder}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Market Depth Chart */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg sm:text-xl">
+                  Market Depth Visualization
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MarketDepthChart
+                  data={orderbookData}
                   simulatedOrder={simulatedOrder}
                 />
               </CardContent>

@@ -1,3 +1,5 @@
+import { MAX_ORDER_LEVELS, ORDER_BOOK_TYPE } from "./constants";
+
 /**
  * Calculates order fill metrics such as:
  * - How much of the order is filled
@@ -54,3 +56,30 @@ export function calculateSlippage(expected, actual) {
   if (!expected || !actual) return 0;
   return Math.abs((actual - expected) / expected) * 100;
 }
+
+/**
+ * Generates cumulative volume chart points from order data.
+ *
+ * @param {Array} orders - Array of [price, volume] pairs (bids or asks).
+ * @param {string} type - "bid" or "ask".
+ * @returns {Array} - Formatted chart points with cumulative volume.
+ */
+export const calculateChartPoints = (orders, type) => {
+  const chartPoints = [];
+  let cumulativeVolume = 0;
+
+  for (let i = 0; i < Math.min(orders.length, MAX_ORDER_LEVELS); i++) {
+    const [price, volume] = orders[i];
+    if (price > 0 && volume > 0) {
+      cumulativeVolume += volume;
+      chartPoints.push({
+        price,
+        bidVolume: type === ORDER_BOOK_TYPE.BID ? cumulativeVolume : 0,
+        askVolume: type === ORDER_BOOK_TYPE.ASK ? cumulativeVolume : 0,
+        type,
+      });
+    }
+  }
+
+  return chartPoints;
+};

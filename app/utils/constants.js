@@ -1,4 +1,4 @@
-export const RECORDS_TO_DISPLAY = 15;
+export const MAX_ORDER_LEVELS = 15;
 
 export const VENUE = {
   OKX: "OKX",
@@ -43,3 +43,8 @@ export const EXECUTION_TYPE = {
   IMMEDIATE: "immediate",
   PENDING: "pending"
 }
+
+export const ORDER_BOOK_TYPE = {
+  BID: "bid",
+  ASK: "ask",
+};

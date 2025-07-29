@@ -1,4 +1,4 @@
-import { RECORDS_TO_DISPLAY, VENUE } from "./constants";
+import { MAX_ORDER_LEVELS , VENUE } from "./constants";
 
 /**
  * Returns the WebSocket URL for a given exchange venue.
@@ -179,7 +179,7 @@ export const generateMockOrderbookData = (venue) => {
   }
 
   // Generate bids below base price
-  for (let i = 0; i < RECORDS_TO_DISPLAY; i++) {
+  for (let i = 0; i < MAX_ORDER_LEVELS ; i++) {
     const price = basePrice - (i + 1) * Math.random() * 50 + 10;
     const quantity = Math.random() * 5 + 1;
     bids.push([price, quantity]);
@@ -189,7 +189,7 @@ export const generateMockOrderbookData = (venue) => {
   bids.sort((a, b) => b[0] - a[0]);
 
   // Generate asks above base price
-  for (let i = 0; i < RECORDS_TO_DISPLAY; i++) {
+  for (let i = 0; i < MAX_ORDER_LEVELS ; i++) {
     const price = basePrice + (i + 1) * Math.random() * 50 + 10;
     const quantity = Math.random() * 5 + 1;
     asks.push([price, quantity]);

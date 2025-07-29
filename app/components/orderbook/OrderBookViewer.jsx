@@ -21,7 +21,7 @@
 import {
   ORDER_SIDE,
   ORDER_TYPE,
-  RECORDS_TO_DISPLAY,
+  MAX_ORDER_LEVELS ,
 } from "@/app/utils/constants";
 import { formatPrice, formatQuantity } from "@/app/utils/formatters";
 import { TrendingDown, TrendingUp } from "lucide-react";
@@ -37,7 +37,12 @@ const PriceQuantityTitle = () => (
   </div>
 );
 
-const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
+const OrderBookViewer = ({
+  data,
+  venue = "",
+  isConnected,
+  simulatedOrder,
+}) => {
   if (!data) {
     return (
       <div className="flex flex-col items-center justify-center h-64 sm:h-96 space-y-4">
@@ -57,10 +62,10 @@ const OrderBookViewer = ({ data, venue, isConnected, simulatedOrder }) => {
   // Filter top 15 bids and asks records
   const bidsData = bids
     .filter(([price, quantity]) => price > 0 && quantity > 0)
-    .slice(0, RECORDS_TO_DISPLAY);
+    .slice(0, MAX_ORDER_LEVELS );
   const asksData = asks
     .filter(([price, quantity]) => price > 0 && quantity > 0)
-    .slice(0, RECORDS_TO_DISPLAY);
+    .slice(0, MAX_ORDER_LEVELS );
 
   const bestBid = bidsData[0]?.[0] || 0;
   const bestAsk = asksData[0]?.[0] || 0;
