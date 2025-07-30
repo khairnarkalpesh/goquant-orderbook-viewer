@@ -72,7 +72,6 @@ const OrderBookViewer = ({
   const spread = bestAsk - bestBid;
 
   const isSimulatedOrderVisible = (price, side) => {
-    console.log({ simulatedOrder, price });
     if (
       !simulatedOrder ||
       simulatedOrder.venue !== venue ||

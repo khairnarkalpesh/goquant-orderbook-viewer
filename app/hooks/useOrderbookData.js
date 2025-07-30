@@ -51,24 +51,20 @@ export function useOrderbookData(venue, symbol) {
         setIsConnected(false);
 
         // Use mock data as fallback
-        console.log(`Using mock data for ${venue}`);
         setOrderbookData(generateMockOrderbookData(venue));
 
         return;
       }
 
-      console.log(`Connecting to ${venue} WebSocket`);
       try {
         wsRef.current = new WebSocket(wsUrl);
         wsRef.current.onopen = () => {
-          console.log(`Connected to ${venue} WebSocket`);
           setIsConnected(true);
           setError(null);
 
           // Send subscription message
           const subscriptionMsg = getSubscriptionMessage(venue, symbol);
           if (subscriptionMsg) {
-            console.log(`Sending subscription to ${venue}:`, subscriptionMsg);
             wsRef.current.send(JSON.stringify(subscriptionMsg));
           }
 
@@ -85,29 +81,20 @@ export function useOrderbookData(venue, symbol) {
         wsRef.current.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
-            console.log(`${venue} message`, data);
 
             // Handle pong responses
             if (data?.op === "pong" || data.pong) {
-              console.log(`${venue} pong recevied`);
               return;
             }
 
             // Handle subscription confirmations
             if (data.success || data.result) {
-              console.log(`✅ ${venue} subscription confirmed`);
               return;
             }
 
             // Parse orderbook data
             const parsedData = parseOrderBookData(data, venue);
             if (parsedData) {
-              console.log(`${venue} orderbook updated:`, {
-                bids: parsedData.bids.length,
-                asks: parsedData.asks.length,
-                lastPrice: parsedData.lastPrice,
-              });
-              console.log(parsedData);
               updateOrderbook(parsedData);
             }
           } catch (error) {
@@ -123,11 +110,9 @@ export function useOrderbookData(venue, symbol) {
         };
 
         wsRef.current.onclose = (event) => {
-          console.log(`${venue} Websocket closed:`, event.code, event.reason);
           setIsConnected(false);
 
           // Use mock data as fallback
-          console.log(`Using mock data for ${venue}`);
           setOrderbookData(generateMockOrderbookData(venue));
         };
       } catch (error) {

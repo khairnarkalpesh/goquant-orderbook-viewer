@@ -90,7 +90,6 @@ export const getSubscriptionMessage = (venue, symbol) => {
  */
 export const parseOrderBookData = (data, venue) => {
   try {
-    console.log(`Parsing ${venue} data:`, data);
     switch (venue) {
       case VENUE.OKX:
         if (data.data && data.data[0]) {
@@ -159,7 +158,6 @@ export const parseOrderBookData = (data, venue) => {
  * @returns {Object} Mock orderbook data with bids, asks, lastPrice, and timestamp
  */
 export const generateMockOrderbookData = (venue) => {
-  console.log(`Generating mock data for ${venue}`);
   const bids = [];
   const asks = [];
   let basePrice;

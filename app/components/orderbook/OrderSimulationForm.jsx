@@ -87,9 +87,6 @@ const OrderSimulationForm = ({
       };
 
       onSimulateOrder(simulatedOrder);
-      console.log(
-        `Order simulated successfully: ${JSON.stringify(simulatedOrder)}`
-      );
     } catch (error) {
       console.error("Error simulating order:", error);
       setErrors({ general: "Failed to simulate order. Please try again." });
