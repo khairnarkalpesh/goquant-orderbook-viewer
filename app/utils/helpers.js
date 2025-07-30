@@ -172,6 +172,7 @@ export const generateMockOrderbookData = (venue) => {
       break;
     case VENUE.DERIBIT:
       basePrice = 43900 + Math.random() * 1000;
+      break;
     default:
       basePrice = 45000 + Math.random() * 1000;
   }
