@@ -1,4 +1,4 @@
-# Real-Time Orderbook Viewer with Rate Limiting
+# Real-Time Orderbook Viewer with Order Simulation
 
 A professional Next.js application built with JavaScript that displays real-time orderbooks from multiple cryptocurrency exchanges with advanced order simulation capabilities, rate limiting, and performance monitoring.
 
