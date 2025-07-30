@@ -140,6 +140,11 @@ The application supports the following cryptocurrency trading pairs:
 
 ## ⚙️ Configuration Options
 
+### Rate Limiting Configuration
+- **OKX**: 500ms between updates
+- **Bybit**: 500ms  between updates
+- **Deribit**: 1000ms between updates
+
 ### Order Simulation Timing Options
 - **Immediate**: 0ms delay
 - **5s delay**: 5000ms delay
