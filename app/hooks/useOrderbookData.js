@@ -7,14 +7,7 @@ import {
   parseOrderBookData,
   throttle,
 } from "../utils/helpers";
-import { VENUE } from "../utils/constants";
-
-// Rate limiting configuration
-const RATE_LIMIT_MS = {
-  OKX: 500, // Update every 500ms for OKX
-  Bybit: 500, // Update every 500ms for Bybit
-  Deribit: 1000, // Update every 1000ms for Deribit
-};
+import { RATE_LIMIT_MS, VENUE } from "../utils/constants";
 
 export function useOrderbookData(venue, symbol) {
   const [orderbookData, setOrderbookData] = useState(null);

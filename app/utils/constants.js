@@ -60,3 +60,10 @@ export const IMBALANCE_STRENGTH = {
   MODERATE: "Moderate",
   STRONG: "Strong",
 };
+
+// Rate limiting configuration
+export const RATE_LIMIT_MS = {
+  OKX: 500, // Update every 500ms for OKX
+  Bybit: 500, // Update every 500ms for Bybit
+  Deribit: 1000, // Update every 1000ms for Deribit
+};
